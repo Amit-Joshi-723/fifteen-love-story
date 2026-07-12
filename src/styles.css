@@ -324,6 +324,11 @@ html { scroll-behavior: smooth; }
 
 .fl-footer { margin-top: 3rem; padding: 1.5rem 0; border-top: .5px solid #e5e5e0; font-size: 11px; color: #888; line-height: 1.6; }
 .fl-footer a { color: #1D9E75; text-decoration: none; }
+
+/* Split layout for chapters 2, 4, 5 */
+.fl-split { display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; align-items: start; margin: 8px 0 14px; }
+.fl-split-left, .fl-split-right { min-width: 0; }
+@media (max-width: 640px) { .fl-split { grid-template-columns: 1fr; } }
 .fl-footer a:hover { text-decoration: underline; }
 
 strong { color: #1a1a18; }
