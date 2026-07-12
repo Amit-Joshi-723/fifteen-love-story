@@ -1001,24 +1001,6 @@ export default function FifteenLove() {
                 text="18 recurring rivalry finals before 2015. 2 brief clusters since — neither lasted more than 3 years. The sport got more competitive and less narrative-driven at exactly the same time."
                 label="All rivalry data verified from Wikipedia · Flag corrections at github.com/Amit-Joshi-723"
               />
-              <div className="fl-bridge">
-                <div className="fl-bridge-label">THE INSIGHT THAT CONNECTS EVERYTHING</div>
-                <h3 className="fl-bridge-h">More competitive. Harder to follow. Here's why both are true.</h3>
-                <p className="fl-bridge-p">
-                  Fan attachment is built through protagonists you follow across years. Today's best
-                  players are also surface specialists in a way the dominant-era players were not.
-                  Sabalenka has not won Roland Garros or Wimbledon. Rybakina has not won Roland
-                  Garros or the US Open. Even Swiatek only won Wimbledon once, in 2025. When the
-                  best players have a surface you can beat them on, they feel beatable rather than
-                  transcendent — and transcendence is what casual fans come back to watch.
-                </p>
-                <p className="fl-bridge-p">
-                  The 2019 US Open final drew 4 million viewers. The 2020 final without a
-                  recognisable name drew 2.15 million — a 46% drop in one year. When Raducanu won
-                  ranked #150, it was extraordinary. She went back to rank 75 the following year.
-                  Sport runs on stories, and a story needs the same characters to return.
-                </p>
-              </div>
             </div>
             <div className="fl-split-right">
               <div className="fl-rival-label">Before 2015 — sustained recurring rivalries · verified</div>
@@ -1053,6 +1035,24 @@ export default function FifteenLove() {
             ))}
           </div>
             </div>
+          </div>
+          <div className="fl-bridge">
+            <div className="fl-bridge-label">THE INSIGHT THAT CONNECTS EVERYTHING</div>
+            <h3 className="fl-bridge-h">More competitive. Harder to follow. Here's why both are true.</h3>
+            <p className="fl-bridge-p">
+              Fan attachment is built through protagonists you follow across years. Today's best
+              players are also surface specialists in a way the dominant-era players were not.
+              <strong>Sabalenka</strong> has not won Roland Garros or Wimbledon. <strong>Rybakina</strong> has not won Roland
+              Garros or the US Open. Even <strong>Swiatek</strong> only won Wimbledon once, in 2025. When the
+              best players have a surface you can beat them on, they feel beatable rather than
+              transcendent — and transcendence is what casual fans come back to watch.
+            </p>
+            <p className="fl-bridge-p">
+              The 2019 US Open final drew <strong>4 million</strong> viewers. The 2020 final without a
+              recognisable name drew <strong>2.15 million</strong> — a <strong>46%</strong> drop in one year. When Raducanu won
+              ranked #150, it was extraordinary. She went back to rank 75 the following year.
+              Sport runs on stories, and a story needs the same characters to return.
+            </p>
           </div>
           <PullQuote>
             Titles spread to players from 20 nations. Who are those nations — and what happened
