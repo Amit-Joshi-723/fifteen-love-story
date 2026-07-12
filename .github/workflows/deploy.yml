@@ -36,8 +36,12 @@ jobs:
           ls -la
           echo "--- .output (if exists) ---"
           ls -la .output 2>/dev/null || echo "no .output folder"
-          echo "--- dist (if exists) ---"
-          ls -la dist 2>/dev/null || echo "no dist folder"
+          echo "--- .output/public (if exists) ---"
+          ls -la .output/public 2>/dev/null || echo "no .output/public folder"
+          echo "--- full .output tree ---"
+          find .output 2>/dev/null | head -50 || echo "no .output at all"
+          echo "--- full dist tree ---"
+          find dist 2>/dev/null | head -50 || echo "no dist at all"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
