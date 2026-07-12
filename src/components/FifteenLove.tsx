@@ -9,7 +9,6 @@ import {
   ResponsiveContainer,
   ReferenceLine,
   CartesianGrid,
-  Legend,
 } from "recharts";
 import { flSupabase } from "@/lib/supabase-fl";
 
@@ -110,13 +109,21 @@ function useDerived(rows: Row[] | null) {
       m.set(w, (m.get(w) || 0) + 1);
     }
 
-    // Annual top-1/3/5 share
+    // 4-year rolling window top-1/3/5 share (year Y uses finals from Y-3..Y)
     const yearRange: number[] = [];
-    for (let y = 2000; y <= 2024; y++) yearRange.push(y);
+    for (let y = 2003; y <= 2024; y++) yearRange.push(y);
     const concentration = yearRange.map((y) => {
-      const m = titlesByYear.get(y);
-      const total = m ? Array.from(m.values()).reduce((a, b) => a + b, 0) : 0;
-      const sorted = m ? Array.from(m.values()).sort((a, b) => b - a) : [];
+      const counts = new Map<string, number>();
+      let total = 0;
+      for (let yy = y - 3; yy <= y; yy++) {
+        const m = titlesByYear.get(yy);
+        if (!m) continue;
+        for (const [p, c] of m) {
+          counts.set(p, (counts.get(p) || 0) + c);
+          total += c;
+        }
+      }
+      const sorted = Array.from(counts.values()).sort((a, b) => b - a);
       const share = (n: number) =>
         total > 0
           ? Math.round((sorted.slice(0, n).reduce((a, b) => a + b, 0) / total) * 100)
@@ -336,16 +343,16 @@ function ConcentrationChart({
         className="fl-chart-wrap"
         aria-label="Line chart of Grand Slam title concentration by top players from 2000 to 2024"
       >
-        <ResponsiveContainer width="100%" height={280}>
+        <ResponsiveContainer width="100%" height={220}>
           <LineChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
             <CartesianGrid stroke="#eee" vertical={false} />
             <XAxis
               dataKey="year"
-              ticks={[2000, 2002, 2004, 2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024]}
+              ticks={[2004, 2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024]}
               tick={{ fontSize: 11, fill: "#888" }}
             />
             <YAxis
-              domain={[0, 100]}
+              domain={[20, 90]}
               tickFormatter={(v) => `${v}%`}
               tick={{ fontSize: 11, fill: "#888" }}
             />
@@ -354,26 +361,26 @@ function ConcentrationChart({
               x={2016}
               stroke="#F59E0B"
               strokeDasharray="4 4"
-              label={{ value: "← 2016", position: "top", fontSize: 11, fill: "#F59E0B" }}
+              strokeWidth={1}
             />
             {show.top1 && (
-              <Line type="monotone" dataKey="top1" stroke="#1D9E75" strokeWidth={2} dot={false} name="Top 1" />
+              <Line type="monotone" dataKey="top1" stroke="#1D9E75" strokeWidth={2.5} dot={false} activeDot={false} name="Top 1" />
             )}
             {show.top3 && (
-              <Line type="monotone" dataKey="top3" stroke="#2563EB" strokeWidth={2} dot={false} name="Top 3" />
+              <Line type="monotone" dataKey="top3" stroke="#2563EB" strokeWidth={2.5} dot={false} activeDot={false} name="Top 3" />
             )}
             {show.top5 && (
               <Line
                 type="monotone"
                 dataKey="top5"
                 stroke="#F59E0B"
-                strokeDasharray="5 5"
+                strokeDasharray="5 3"
                 strokeWidth={2}
                 dot={false}
+                activeDot={false}
                 name="Top 5"
               />
             )}
-            <Legend wrapperStyle={{ fontSize: 11 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
