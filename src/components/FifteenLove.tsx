@@ -639,32 +639,42 @@ function GeoList({
 type Results = { better: number; worse: number; different: number; total: number };
 
 function ResultsCard({ results }: { results: Results | null }) {
-  const r = results ?? { better: 39, worse: 34, different: 27, total: 0 };
-  const total = r.total || r.better + r.worse + r.different;
-  const pct = (n: number) => (total > 0 ? Math.round((n / total) * 100) : 0);
-  const bars = [
-    { key: "better", label: "Better", val: r.better, color: "#1D9E75" },
-    { key: "worse", label: "Worse", val: r.worse, color: "#DC2626" },
-    { key: "different", label: "Different", val: r.different, color: "#6B7280" },
-  ];
+  const hasReal = !!results && results.total > 0;
+  const bars = hasReal
+    ? [
+        { key: "better", label: "Better", pct: Math.round((results!.better / results!.total) * 100), color: "#1D9E75" },
+        { key: "worse", label: "Worse", pct: Math.round((results!.worse / results!.total) * 100), color: "#DC2626" },
+        { key: "different", label: "Different", pct: Math.round((results!.different / results!.total) * 100), color: "#6B7280" },
+      ]
+    : [
+        { key: "better", label: "Better", pct: 39, color: "#1D9E75" },
+        { key: "worse", label: "Worse", pct: 34, color: "#DC2626" },
+        { key: "different", label: "Different", pct: 27, color: "#6B7280" },
+      ];
+  const [animPct, setAnimPct] = useState<number[]>([0, 0, 0]);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setAnimPct(bars.map((b) => b.pct)));
+    return () => cancelAnimationFrame(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasReal, bars[0].pct, bars[1].pct, bars[2].pct]);
   return (
     <div className="fl-results">
-      {bars.map((b) => (
+      {bars.map((b, i) => (
         <div key={b.key} className="fl-results-row">
           <div className="fl-results-label">{b.label}</div>
           <div className="fl-results-bar-wrap">
             <div
               className="fl-results-bar"
-              style={{ width: `${pct(b.val)}%`, background: b.color }}
+              style={{ width: `${animPct[i]}%`, background: b.color }}
             />
-            <span className="fl-results-pct">{pct(b.val)}%</span>
+            <span className="fl-results-pct">{b.pct}%</span>
           </div>
         </div>
       ))}
       <div className="fl-results-total">
-        {total > 0
-          ? `${total.toLocaleString()} people have voted since Wimbledon 2026`
-          : "Loading live results…"}
+        {hasReal
+          ? `${results!.total.toLocaleString()} people have voted since Wimbledon 2026`
+          : "Be the first to vote — results update in real time"}
       </div>
       <div className="fl-note">Live results via Supabase · Updated in real time</div>
     </div>
