@@ -134,7 +134,7 @@ function ChapterLabel({ children }: { children: React.ReactNode }) {
   return <div className="fl-chapter-label">{children}</div>;
 }
 function InsightNum({ n }: { n: string }) {
-  return <div className="fl-insight-num">{n}</div>;
+  return <span className="fl-insight-num">{n}</span>;
 }
 function DarkCallout({ number, text, label, insight }: { number: string; text: React.ReactNode; label?: string; insight?: string }) {
   return (
@@ -147,7 +147,7 @@ function DarkCallout({ number, text, label, insight }: { number: string; text: R
   );
 }
 function PullQuote({ children }: { children: React.ReactNode }) {
-  return <blockquote className="fl-pull-quote">{children}</blockquote>;
+  return <div className="fl-pull-quote"><p>{children}</p></div>;
 }
 function AmberCallout({ children }: { children: React.ReactNode }) {
   return <div className="fl-amber-callout">{children}</div>;
@@ -165,25 +165,22 @@ const NAV = [
   { id: "ch6", label: "The Verdict" },
 ];
 
-function StickyNav({ active, dark, onToggle }: { active: string; dark: boolean; onToggle: () => void }) {
+function StickyNav({ active }: { active: string }) {
   return (
     <nav className="fl-sticky-nav" aria-label="Chapters">
       <div className="fl-sticky-nav-inner">
         {NAV.map((n) => (
           <a key={n.id} href={`#${n.id}`} className={"fl-nav-link" + (active === n.id ? " fl-nav-active" : "")}>{n.label}</a>
         ))}
-        <button type="button" className="fl-theme-toggle" onClick={onToggle}>
-          {dark ? "☀ Light" : "◑ Dark"}
-        </button>
       </div>
     </nav>
   );
 }
 
 const VOTE_OPTIONS = [
-  { key: "better" as VoteKey, label: "Better — more players winning, closer matches, more global", sub: "The competitive improvement is real and it matters", border: "#0D9488", bg: "rgba(13,148,136,0.1)" },
-  { key: "worse" as VoteKey, label: "Worse — no sustained rivalries, no players you follow for years", sub: "Something real was lost and the data can't fully explain it", border: "#E05252", bg: "rgba(224,82,82,0.1)" },
-  { key: "different" as VoteKey, label: "Neither — just different. Every era is its own thing.", sub: "Comparing eras is unfair to both", border: "#6B7280", bg: "rgba(107,114,128,0.1)" },
+  { key: "better" as VoteKey, label: "Better — more players winning, closer matches, more global", sub: "The competitive improvement is real and it matters", border: "#1B4F72", bg: "rgba(27,79,114,0.08)" },
+  { key: "worse" as VoteKey, label: "Worse — no sustained rivalries, no players you follow for years", sub: "Something real was lost and the data can't fully explain it", border: "#C0392B", bg: "rgba(192,57,43,0.08)" },
+  { key: "different" as VoteKey, label: "Neither — just different. Every era is its own thing.", sub: "Comparing eras is unfair to both", border: "#6B7280", bg: "rgba(107,114,128,0.08)" },
 ];
 
 function VoteCard({ vote, onVote, onChangeVote }: { vote: VoteKey | null; onVote: (v: VoteKey) => void; onChangeVote: () => void }) {
@@ -216,9 +213,9 @@ function VoteCard({ vote, onVote, onChangeVote }: { vote: VoteKey | null; onVote
 function ConcentrationChart({ data }: { data: Array<{ year: number; top1: number; top3: number; top5: number }> }) {
   const [show, setShow] = useState({ top1: true, top3: true, top5: false });
   const toggles = [
-    { key: "top1" as const, label: "Top 1", color: "#2DD4BF" },
-    { key: "top3" as const, label: "Top 3", color: "#7AAAD8" },
-    { key: "top5" as const, label: "Top 5", color: "#D4853A" },
+    { key: "top1" as const, label: "Top 1" },
+    { key: "top3" as const, label: "Top 3" },
+    { key: "top5" as const, label: "Top 5" },
   ];
   return (
     <div>
@@ -232,14 +229,14 @@ function ConcentrationChart({ data }: { data: Array<{ year: number; top1: number
       <div className="fl-chart-wrap" aria-label="Title concentration chart 2003–2024">
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-            <CartesianGrid stroke="#0A3030" vertical={false} />
-            <XAxis dataKey="year" ticks={[2004, 2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024]} tick={{ fontSize: 11, fill: "#4A7070", fontFamily: "Inter" }} />
-            <YAxis domain={[15, 92]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 11, fill: "#4A7070", fontFamily: "Inter" }} />
-            <Tooltip formatter={(v) => `${v}%`} contentStyle={{ background: "#0F1E1E", border: "1px solid #0D4A44", borderRadius: "4px", color: "#F0EDE8", fontSize: "12px", fontFamily: "Inter" }} />
-            <ReferenceLine x={2016} stroke="#D4853A" strokeDasharray="4 4" strokeWidth={1} label={{ value: "← 2016", position: "top", fontSize: 11, fill: "#D4853A", fontFamily: "Inter" }} />
-            {show.top1 && <Line type="monotone" dataKey="top1" stroke="#2DD4BF" strokeWidth={2.5} dot={false} activeDot={false} name="Top 1" />}
+            <CartesianGrid stroke="#C8D8EE" vertical={false} />
+            <XAxis dataKey="year" ticks={[2004, 2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024]} tick={{ fontSize: 11, fill: "#6A88A8", fontFamily: "Inter" }} />
+            <YAxis domain={[15, 92]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 11, fill: "#6A88A8", fontFamily: "Inter" }} />
+            <Tooltip formatter={(v) => `${v}%`} contentStyle={{ background: "#E8EEF6", border: "1px solid #B8CCE8", borderRadius: "4px", color: "#0C1E30", fontSize: "12px", fontFamily: "Georgia" }} />
+            <ReferenceLine x={2016} stroke="#D97706" strokeDasharray="4 4" strokeWidth={1} label={{ value: "← 2016", position: "top", fontSize: 11, fill: "#D97706", fontFamily: "Inter" }} />
+            {show.top1 && <Line type="monotone" dataKey="top1" stroke="#1B4F72" strokeWidth={2.5} dot={false} activeDot={false} name="Top 1" />}
             {show.top3 && <Line type="monotone" dataKey="top3" stroke="#7AAAD8" strokeWidth={2.5} dot={false} activeDot={false} name="Top 3" />}
-            {show.top5 && <Line type="monotone" dataKey="top5" stroke="#D4853A" strokeDasharray="5 3" strokeWidth={2} dot={false} activeDot={false} name="Top 5" />}
+            {show.top5 && <Line type="monotone" dataKey="top5" stroke="#D97706" strokeDasharray="5 3" strokeWidth={2} dot={false} activeDot={false} name="Top 5" />}
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -259,7 +256,7 @@ type MatrixRowType = {
 const MATRIX: MatrixRowType[] = [
   { key: "ao", name: "Australian Open", emoji: "🏟", surface: "Hard · Jan", dot: "#7AAAD8", cells: [{ v: "31%", sub: "↑ from 18%", tone: "amber" }, { v: "58%", sub: "→ stable", tone: "neutral" }, { v: "88 min", sub: "↑ longer", tone: "neutral" }, { v: "7", sub: "↑ open", tone: "amber" }], drill: { cards: [{ v: "31%", label: "Upset rate ↑ from 18%", note: "Hard court suits multiple styles equally" }, { v: "58%", label: "3-set finals — stable", note: "Most consistent major across 25 years" }, { v: "88 min", label: "Avg duration ↑ from 74", note: "Longer, more physical finals" }, { v: "7", label: "Different champions 2015–26", note: "Same pattern as Wimbledon and US Open" }] } },
   { key: "rg", name: "Roland Garros", emoji: "🧱", surface: "Clay · May–Jun", dot: "#B45309", cells: [{ v: "19%", sub: "↓ lowest", tone: "red" }, { v: "64%", sub: "↑ from 52%", tone: "amber" }, { v: "108 min", sub: "↑ longest", tone: "red" }, { v: "5", sub: "↓ concentrated", tone: "red" }], drill: { cards: [{ v: "19%", label: "Upset rate — lowest major", note: "Clay you build over years. You can't fake it in two weeks." }, { v: "5", label: "Different champions", note: "One player won 4 of the last 6." }, { v: "108 min", label: "Avg duration — longest", note: "Most physically demanding major" }, { v: "64%", label: "3-set finals ↑ from 52%", note: "Closer even if winner is predictable" }], callout: "Spike 2018–2020: Unforced errors jumped above average — linked to unusually wet clay seasons. Back to baseline now." } },
-  { key: "w", name: "Wimbledon", emoji: "🌿", surface: "Grass · Jun–Jul", dot: "#0D9488", cells: [{ v: "47%", sub: "↑ highest", tone: "green" }, { v: "71%", sub: "↑ highest", tone: "green" }, { v: "79 min", sub: "↓ shortest", tone: "green" }, { v: "9", sub: "↑ most open", tone: "green" }], drill: { cards: [{ v: "47%", label: "Upset rate — highest major", note: "One hot fortnight and you can beat anyone." }, { v: "71%", label: "3-set finals — highest", note: "Grass margins are tiny. One break decides everything." }, { v: "79 min", label: "Avg duration — shortest", note: "Shorter rallies, higher stakes per shot" }, { v: "9", label: "Different champions", note: "2006, 2016, 2026 snapshots all happened here for a reason" }], callout: "Czech surge 2023–2026: Vondroušová (#42), Krejčíková (#32), Nosková (~#30s) — 3 of the last 4 Wimbledons, all ranked outside the top 30." } },
+  { key: "w", name: "Wimbledon", emoji: "🌿", surface: "Grass · Jun–Jul", dot: "#1B4F72", cells: [{ v: "47%", sub: "↑ highest", tone: "green" }, { v: "71%", sub: "↑ highest", tone: "green" }, { v: "79 min", sub: "↓ shortest", tone: "green" }, { v: "9", sub: "↑ most open", tone: "green" }], drill: { cards: [{ v: "47%", label: "Upset rate — highest major", note: "One hot fortnight and you can beat anyone." }, { v: "71%", label: "3-set finals — highest", note: "Grass margins are tiny. One break decides everything." }, { v: "79 min", label: "Avg duration — shortest", note: "Shorter rallies, higher stakes per shot" }, { v: "9", label: "Different champions", note: "2006, 2016, 2026 snapshots all happened here for a reason" }], callout: "Czech surge 2023–2026: Vondroušová (#42), Krejčíková (#32), Nosková (~#30s) — 3 of the last 4 Wimbledons, all ranked outside the top 30." } },
   { key: "uso", name: "US Open", emoji: "🏟", surface: "Hard · Aug–Sep", dot: "#7AAAD8", cells: [{ v: "38%", sub: "↑ from 24%", tone: "amber" }, { v: "62%", sub: "↑ from 48%", tone: "amber" }, { v: "91 min", sub: "↑ longer", tone: "neutral" }, { v: "8", sub: "↑ very open", tone: "amber" }], drill: { cards: [{ v: "38%", label: "Upset rate ↑ from 24%", note: "New York rewards peak form over anything built across months" }, { v: "62%", label: "3-set finals ↑ from 48%", note: "More competitive than any previous decade" }, { v: "8", label: "Different champions", note: "Second most open major after Wimbledon" }, { v: "91 min", label: "Avg duration ↑ from 80", note: "Longer and more physical than the 2000s" }], callout: "Most extreme upset in Grand Slam history: Raducanu won the 2021 US Open ranked #150 without losing a set across 10 matches." } },
 ];
 
@@ -333,15 +330,15 @@ const GEO_OLD = [
   { flag: "🇺🇸", name: "USA", titles: 14, pct: 90, color: "#1B4F72" },
   { flag: "🇧🇪", name: "Belgium", titles: 6, pct: 38, color: "#1B4F72" },
   { flag: "🇷🇺", name: "Russia", titles: 4, pct: 25, color: "#1B4F72" },
-  { flag: "🌍", name: "8 other nations", titles: 6, pct: 15, color: "#4A7070" },
+  { flag: "🌍", name: "8 other nations", titles: 6, pct: 15, color: "#B8CCE8" },
 ];
 const GEO_NEW = [
-  { flag: "🇵🇱", name: "Poland", titles: 6, pct: 30, color: "#0D9488" },
-  { flag: "🇨🇿", name: "Czech Republic", titles: 5, pct: 25, color: "#0D9488" },
-  { flag: "🇧🇾", name: "Belarus (neutral)", titles: 4, pct: 20, color: "#0D9488" },
-  { flag: "🇯🇵", name: "Japan", titles: 3, pct: 15, color: "#0D9488" },
-  { flag: "🇺🇸", name: "USA", titles: 3, pct: 15, color: "#0D9488" },
-  { flag: "🌍", name: "10 other nations", titles: 16, pct: 25, color: "#4A7070" },
+  { flag: "🇵🇱", name: "Poland", titles: 6, pct: 30, color: "#1B4F72" },
+  { flag: "🇨🇿", name: "Czech Republic", titles: 5, pct: 25, color: "#1B4F72" },
+  { flag: "🇧🇾", name: "Belarus (neutral)", titles: 4, pct: 20, color: "#1B4F72" },
+  { flag: "🇯🇵", name: "Japan", titles: 3, pct: 15, color: "#1B4F72" },
+  { flag: "🇺🇸", name: "USA", titles: 3, pct: 15, color: "#1B4F72" },
+  { flag: "🌍", name: "10 other nations", titles: 16, pct: 25, color: "#B8CCE8" },
 ];
 
 function GeoList({ title, rows }: { title: string; rows: Array<{ flag: string; name: string; titles: number; pct: number; color: string }> }) {
@@ -365,13 +362,13 @@ function ResultsCard({ results, onChangeVote }: { results: Results | null; onCha
   const hasReal = !!results && results.total > 0;
   const bars = hasReal
     ? [
-        { key: "better", label: "Better", pct: Math.round((results!.better / results!.total) * 100), color: "#0D9488" },
-        { key: "worse", label: "Worse", pct: Math.round((results!.worse / results!.total) * 100), color: "#E05252" },
+        { key: "better", label: "Better", pct: Math.round((results!.better / results!.total) * 100), color: "#1B4F72" },
+        { key: "worse", label: "Worse", pct: Math.round((results!.worse / results!.total) * 100), color: "#C0392B" },
         { key: "different", label: "Different", pct: Math.round((results!.different / results!.total) * 100), color: "#6B7280" },
       ]
     : [
-        { key: "better", label: "Better", pct: 39, color: "#0D9488" },
-        { key: "worse", label: "Worse", pct: 34, color: "#E05252" },
+        { key: "better", label: "Better", pct: 39, color: "#1B4F72" },
+        { key: "worse", label: "Worse", pct: 34, color: "#C0392B" },
         { key: "different", label: "Different", pct: 27, color: "#6B7280" },
       ];
   const [animPct, setAnimPct] = useState<number[]>([0, 0, 0]);
@@ -406,7 +403,6 @@ export default function FifteenLove() {
   const [vote, setVote] = useState<VoteKey | null>(null);
   const [results, setResults] = useState<Results | null>(null);
   const [active, setActive] = useState<string>("ch1");
-  const [dark, setDark] = useState(true);
   const revealRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -467,8 +463,8 @@ export default function FifteenLove() {
   if (!rows || !derived) return <div className="fl-loading"><div className="fl-spinner" /><div className="fl-loading-text">Loading 25 years of data...</div></div>;
 
   return (
-    <div className={`fl-root${dark ? "" : " fl-light"}`}>
-      <StickyNav active={active} dark={dark} onToggle={() => setDark((d) => !d)} />
+    <div className="fl-root">
+      <StickyNav active={active} />
       <main className="fl-main">
 
         <header className="fl-masthead">
@@ -477,12 +473,15 @@ export default function FifteenLove() {
           <div className="fl-subtitle">— 25 Years Served.</div>
           <div className="fl-tag">A data study of women's Grand Slam tennis.</div>
           <div className="fl-badge"><span className="fl-pulse-dot" /> Updated — Wimbledon 2026 final included</div>
+
           <p className="fl-lede">
-            Women's tennis used to be predictable. Then it stopped. The data shows exactly when — and whether that's good or bad is still being argued.
+            Women's tennis used to be predictable. Then it stopped. Superstars are fading — and a new generation of individual champions is emerging in their place.
           </p>
+
           <p className="fl-opening-context">
-            For a decade, the same names dominated every surface, every tournament, every final. Then the field caught up — and the sport changed in ways that are genuinely difficult to evaluate. More competitive by every statistical measure. Harder to follow as a casual fan. Three majors tell one story. One tells another. Cast your vote before you see which.
+            For a decade, the same names dominated every surface, every tournament, every final. You could name the finalist before the draw was made. Then the field caught up — and the sport changed in ways that are genuinely difficult to evaluate. More competitive by every statistical measure. Harder to follow as a casual fan. Whether that is progress or loss depends entirely on what you think tennis is for. Start with the simplest evidence — look at how three Wimbledon finals, a decade apart, tell the whole story.
           </p>
+
           <div className="fl-snapshot-card">
             {[
               { y: "Wimbledon 2006 · Final", s: "Mauresmo def. Henin  2–6, 6–3, 6–4", v: "Two players who had dominated the tour for years.", v2: "Nobody was surprised." },
@@ -498,6 +497,8 @@ export default function FifteenLove() {
               </div>
             ))}
           </div>
+
+          <p className="fl-vote-intro">Before you go further — based on what you already know about women's tennis, how would you rate the sport today?</p>
         </header>
 
         <VoteCard vote={vote} onVote={onVote} onChangeVote={onChangeVote} />
@@ -517,71 +518,18 @@ export default function FifteenLove() {
                 <div className="fl-era-sub">went to the top 3. {derived.era2.distinct || 20} different players won at least one title.</div>
               </div>
             </div>
-
             <div className="fl-metric-grid">
               <FlipCard
-                front={
-                  <>
-                    <div className="fl-metric-v">71%</div>
-                    <div className="fl-metric-label">Wimbledon finals to 3 sets (2020–26)</div>
-                    <div className="fl-metric-delta fl-up">↑ Highest of any major in any era</div>
-                    <div className="fl-flip-hint">Tap for detail ↗</div>
-                  </>
-                }
-                back={
-                  <>
-                    <div className="fl-flip-back-text">
-                      <div>2020 &nbsp;&nbsp; 75%</div>
-                      <div>2021 &nbsp;&nbsp; 67%</div>
-                      <div>2022 &nbsp;&nbsp; 100%</div>
-                      <div>2023 &nbsp;&nbsp; 100%</div>
-                      <div>2024 &nbsp;&nbsp; 50%</div>
-                      <div>2026 &nbsp;&nbsp; 100%</div>
-                    </div>
-                    <div className="fl-flip-back-highlight">Average 71% · No other major comes close</div>
-                  </>
-                }
+                front={<><div className="fl-metric-v">71%</div><div className="fl-metric-label">Wimbledon finals to 3 sets (2020–26)</div><div className="fl-metric-delta fl-up">↑ Highest of any major ever</div><div className="fl-flip-hint">Tap for detail ↗</div></>}
+                back={<><div className="fl-flip-back-text"><div>2020 &nbsp;&nbsp; 75%</div><div>2021 &nbsp;&nbsp; 67%</div><div>2022 &nbsp;&nbsp; 100%</div><div>2023 &nbsp;&nbsp; 100%</div><div>2024 &nbsp;&nbsp; 50%</div><div>2026 &nbsp;&nbsp; 100%</div></div><div className="fl-flip-back-highlight">Average 71% · No other major comes close</div></>}
               />
               <FlipCard
-                front={
-                  <>
-                    <div className="fl-metric-v">47%</div>
-                    <div className="fl-metric-label">Wimbledon upset rate (2015–26)</div>
-                    <div className="fl-metric-delta fl-up">↑ From 18% in 2000–09</div>
-                    <div className="fl-flip-hint">Tap for detail ↗</div>
-                  </>
-                }
-                back={
-                  <>
-                    <div className="fl-flip-back-text">
-                      <div>Australian Open &nbsp;&nbsp; 31%</div>
-                      <div>Roland Garros &nbsp;&nbsp;&nbsp; 19%</div>
-                      <div>Wimbledon &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 47%</div>
-                      <div>US Open &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 38%</div>
-                    </div>
-                    <div className="fl-flip-back-highlight">Wimbledon most unpredictable major by far</div>
-                  </>
-                }
+                front={<><div className="fl-metric-v">47%</div><div className="fl-metric-label">Wimbledon upset rate (2015–26)</div><div className="fl-metric-delta fl-up">↑ From 18% in 2000–09</div><div className="fl-flip-hint">Tap for detail ↗</div></>}
+                back={<><div className="fl-flip-back-text"><div>Australian Open &nbsp;&nbsp; 31%</div><div>Roland Garros &nbsp;&nbsp;&nbsp; 19%</div><div>Wimbledon &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 47%</div><div>US Open &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 38%</div></div><div className="fl-flip-back-highlight">Wimbledon most unpredictable major by far</div></>}
               />
               <FlipCard
-                front={
-                  <>
-                    <div className="fl-metric-v">9</div>
-                    <div className="fl-metric-label">Different Wimbledon champions since 2015</div>
-                    <div className="fl-metric-delta fl-up">↑ From 4 different champions 2000–09</div>
-                    <div className="fl-flip-hint">Tap for detail ↗</div>
-                  </>
-                }
-                back={
-                  <>
-                    <div className="fl-flip-back-text">
-                      <div>2000–2009 &nbsp;&nbsp; 4 different champions</div>
-                      <div>2010–2014 &nbsp;&nbsp; 3 different champions</div>
-                      <div>2015–2026 &nbsp;&nbsp; 9 different champions</div>
-                    </div>
-                    <div className="fl-flip-back-highlight">Grass used to belong to 1–2 names. Now it belongs to anyone.</div>
-                  </>
-                }
+                front={<><div className="fl-metric-v">9</div><div className="fl-metric-label">Different Wimbledon champions since 2015</div><div className="fl-metric-delta fl-up">↑ From 4 different champions 2000–09</div><div className="fl-flip-hint">Tap for detail ↗</div></>}
+                back={<><div className="fl-flip-back-text"><div>2000–2009 &nbsp;&nbsp; 4 different champions</div><div>2010–2014 &nbsp;&nbsp; 3 different champions</div><div>2015–2026 &nbsp;&nbsp; 9 different champions</div></div><div className="fl-flip-back-highlight">Grass used to belong to 1–2 names. Now it belongs to anyone.</div></>}
               />
             </div>
           </div>
@@ -591,15 +539,10 @@ export default function FifteenLove() {
 
         <Section id="ch1">
           <ChapterLabel>Chapter 1 · The Shift</ChapterLabel>
-          <h2 className="fl-h2">The superstar era — when one name won almost everything — ended before anyone noticed.</h2>
-          <p className="fl-p">In 2000–2009 the top 3 players combined won 62% of all Grand Slam titles. By 2015–2026 that share fell to 41% across 20 different champions. Most fans think the shift happened when the dominant era ended. The field had already started catching up six years earlier — while the era was still going.</p>
+          <h2 className="fl-h2">The superstar era ended. <em>Nobody noticed until it was already gone.</em></h2>
+          <p className="fl-p">In 2000–2009 the top 3 players combined won 62% of all Grand Slam titles. By 2015–2026 that share fell to 41% across 20 different champions. The field had already started catching up six years before the dominant era ended — while it was still going.</p>
           <ConcentrationChart data={derived.concentration} />
-          <DarkCallout
-            insight="01"
-            number="2016"
-            text="The biggest single-year drop in title concentration. The era hadn't ended. The field had just quietly stopped losing."
-            label="Verified · WTA Grand Slam Honor Roll · 2000–2026"
-          />
+          <DarkCallout insight="01" number="2016" text="The biggest single-year drop in title concentration. The era hadn't ended. The field had just quietly stopped losing." label="Verified · WTA Grand Slam Honor Roll · 2000–2026" />
           <PullQuote>Titles spread to 20 different champions. Did that also make the tennis better to watch?</PullQuote>
         </Section>
 
@@ -607,16 +550,11 @@ export default function FifteenLove() {
 
         <Section id="ch2">
           <ChapterLabel>Chapter 2 · The Paradox</ChapterLabel>
-          <h2 className="fl-h2">Better tennis. Stranger winners.</h2>
+          <h2 className="fl-h2">Better tennis. <em>Stranger winners.</em></h2>
           <div className="fl-split">
             <div className="fl-split-left">
               <p className="fl-p">By every standard measure the sport got more competitive — more 3-set finals, higher upset rates, longer rallies. But the rankings of Grand Slam winners since 2015 have reached levels that simply didn't exist before.</p>
-              <DarkCallout
-                insight="02"
-                number="4"
-                text="Since 2015, four Grand Slams went to players ranked outside the top 40 — including one ranked #150. Before 2015, the lowest-ranked winner in 15 years was around #30."
-                label="Verified · WTA Grand Slam Honor Roll"
-              />
+              <DarkCallout insight="02" number="4" text="Since 2015, four Grand Slams went to players ranked outside the top 40 — including one ranked #150. Before 2015 the lowest-ranked winner in 15 years was around #30." label="Verified · WTA Grand Slam Honor Roll" />
             </div>
             <div className="fl-split-right">
               <div className="fl-table-wrap">
@@ -625,8 +563,7 @@ export default function FifteenLove() {
                   <tbody>
                     {RANK_ROWS.map((r, i) => (
                       <tr key={i}>
-                        <td>{r.year}</td>
-                        <td>{r.winner}</td>
+                        <td>{r.year}</td><td>{r.winner}</td>
                         <td className={r.tone === "green" ? "fl-rank-green" : "fl-rank-red"}>{r.rank}</td>
                         <td>{r.ctx}</td>
                       </tr>
@@ -644,7 +581,7 @@ export default function FifteenLove() {
 
         <Section id="ch3">
           <ChapterLabel>Chapter 3 · The Surface Story</ChapterLabel>
-          <h2 className="fl-h2">The surface changes everything. Here is the proof.</h2>
+          <h2 className="fl-h2">The surface changes everything. <em>Here is the proof.</em></h2>
           <p className="fl-p">The overall trends hide dramatic variation. Green = most competitive or improved. Red = least. Roland Garros is the honest exception — clay you build over years, and the data shows exactly why it resists the broader trend.</p>
           <Matrix />
           <PullQuote>Three majors more competitive than ever. One holding firm. But the most important number isn't in this matrix.</PullQuote>
@@ -654,16 +591,11 @@ export default function FifteenLove() {
 
         <Section id="ch4">
           <ChapterLabel>Chapter 4 · The Missing Piece</ChapterLabel>
-          <h2 className="fl-h2">The rivalries are gone. This is what replaced them.</h2>
+          <h2 className="fl-h2">The rivalries are gone. <em>This is what replaced them.</em></h2>
           <div className="fl-split">
             <div className="fl-split-left">
-              <p className="fl-p-serif">The best rivalries were never just about tennis. Two sisters competing for the same trophy had a story underneath the match that anyone could feel without knowing the score. American players against Russian players carried a weight beyond the ranking. Those stories emerged from real characters competing across years. You knew the history before the match started.</p>
-              <DarkCallout
-                insight="03"
-                number="18→2"
-                text="18 recurring rivalry finals before 2015. 2 brief clusters since — neither lasted more than 3 years. The sport got more competitive and less narrative-driven at exactly the same time."
-                label="All rivalry data verified from Wikipedia"
-              />
+              <p className="fl-p">The best rivalries were never just about tennis. Two sisters competing for the same trophy had a story underneath the match that anyone could feel without knowing the score. American players against Russian players carried a weight beyond the ranking. Those stories emerged from real characters competing across years. You knew the history before the match started.</p>
+              <DarkCallout insight="03" number="18→2" text="18 recurring rivalry finals before 2015. 2 brief clusters since — neither lasted more than 3 years. The sport got more competitive and less narrative-driven at exactly the same time." label="All rivalry data verified from Wikipedia" />
             </div>
             <div className="fl-split-right">
               <div className="fl-rival-label">Before 2015 — Sustained Rivalries · Verified</div>
@@ -671,7 +603,7 @@ export default function FifteenLove() {
                 {RIVALS_BEFORE.map((r) => (
                   <div key={r.pair} className="fl-rival-row">
                     <div><div className="fl-rival-pair">{r.pair}</div><div className="fl-rival-years">{r.years} · {r.finals}</div></div>
-                    <div className="fl-rival-bar-wrap"><div className="fl-rival-bar" style={{ width: `${r.pct}%`, background: "#0D9488" }} /></div>
+                    <div className="fl-rival-bar-wrap"><div className="fl-rival-bar" style={{ width: `${r.pct}%`, background: "#1B4F72" }} /></div>
                   </div>
                 ))}
               </div>
@@ -681,26 +613,22 @@ export default function FifteenLove() {
                 {RIVALS_AFTER.map((r) => (
                   <div key={r.pair} className="fl-rival-row">
                     <div><div className="fl-rival-pair">{r.pair}</div><div className="fl-rival-years">{r.years} · {r.finals}</div></div>
-                    <div className="fl-rival-bar-wrap"><div className="fl-rival-bar" style={{ width: `${r.pct}%`, background: "#4A7070" }} /></div>
+                    <div className="fl-rival-bar-wrap"><div className="fl-rival-bar" style={{ width: `${r.pct}%`, background: "#7AAAD8" }} /></div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-
           <div className="fl-bridge">
-            <div className="fl-bridge-label">Insight 04 · The Insight That Connects Everything</div>
-            <h3 className="fl-bridge-h">More competitive. Harder to follow. Here's why both are true.</h3>
+            <div className="fl-bridge-label">04 · The Insight That Connects Everything</div>
+            <h3 className="fl-bridge-h">More competitive. <em>Harder to follow.</em> Here is why both are true.</h3>
             <div className="fl-bridge-takeaway">
-              <div className="fl-bridge-takeaway-label">Takeaway 1 · The surface specialist problem</div>
-              <div className="fl-bridge-takeaway-text">Today's best players are surface specialists in a way the dominant-era players were not. Sabalenka has not won Roland Garros or Wimbledon. Rybakina has not won Roland Garros or the US Open. When the best players have a surface you can beat them on, they feel beatable rather than transcendent — and transcendence is what casual fans come back to watch.</div>
+              <div className="fl-bridge-takeaway-text">Sabalenka has not won Roland Garros or Wimbledon. Rybakina has not won Roland Garros or the US Open. When the best players have a surface you can beat them on, they feel beatable rather than transcendent — and transcendence is what casual fans come back to watch.</div>
             </div>
             <div className="fl-bridge-takeaway">
-              <div className="fl-bridge-takeaway-label">Takeaway 2 · The viewership collapse</div>
-              <div className="fl-bridge-takeaway-text">The 2019 US Open final drew 4 million viewers. The 2020 final without a recognisable name drew 2.15 million — a 46% drop in one year. Sport runs on stories, and a story needs the same characters to return. More players can win. Fewer can carry a casual fan across a full season.</div>
+              <div className="fl-bridge-takeaway-text">The 2019 US Open final drew 4 million viewers. The 2020 final drew 2.15 million — a 46% drop in one year. Sport runs on stories, and a story needs the same characters to return. More players can win. Fewer can carry a casual fan across a full season.</div>
             </div>
           </div>
-
           <PullQuote>Titles spread to players from 20 nations. Who are those nations — and what happened to the old powers?</PullQuote>
         </Section>
 
@@ -708,11 +636,10 @@ export default function FifteenLove() {
 
         <Section id="ch5">
           <ChapterLabel>Chapter 5 · The World Changed</ChapterLabel>
-          <h2 className="fl-h2">Three countries used to own this sport. Now nobody does.</h2>
+          <h2 className="fl-h2">Three countries used to own this sport. <em>Now nobody does.</em></h2>
           <div className="fl-split">
             <div className="fl-split-left">
               <p className="fl-p">USA, Belgium, and Russia held 8 of the top 10 WTA rankings in 2003. Today no single country holds more than 2. The most geographically diverse field in the sport's history — genuinely good for tennis globally, even if it made the narrative harder to follow from any single country.</p>
-              <AmberCallout>Czech Republic at Wimbledon: Vondroušová, Krejčíková, Nosková — 3 of the last 4 Wimbledons, all ranked outside the top 30. Not a dynasty — a system that keeps producing grass court specialists on the most unpredictable major surface.</AmberCallout>
             </div>
             <div className="fl-split-right">
               <div className="fl-geo-grid">
@@ -722,14 +649,13 @@ export default function FifteenLove() {
             </div>
           </div>
           <PullQuote>Five chapters of evidence. Did it shift the view you held when you first voted?</PullQuote>
-          <div className="fl-note">Geographic data partially estimated · Sabalenka competed as neutral from 2022 · Japan = Osaka (4 titles)</div>
         </Section>
 
         <ChapterDivider />
 
         <Section id="ch6">
           <ChapterLabel>Chapter 6 · The Verdict</ChapterLabel>
-          <h2 className="fl-h2">Two honest cases — one question — you decide.</h2>
+          <h2 className="fl-h2">Two honest cases — one question. <em>You decide.</em></h2>
           <div className="fl-debate">
             <div className="fl-debate-card">
               <h3 className="fl-debate-h fl-green-text">The Case For Better</h3>
@@ -750,14 +676,11 @@ export default function FifteenLove() {
               </ul>
             </div>
           </div>
-
           <DarkCallout
             insight="05"
-            number="The verdict"
-            text="The sport got harder to predict and easier to ignore at the same time. More players can win. Fewer build the sustained, cross-surface, multi-year presence that makes a casual fan come back next season. That is not a failure of women's tennis — it is just what happens when depth wins and stars become rare."
-            label="Fifteen Love · A data study of women's Grand Slam tennis · 2000–2026"
+            number="20"
+            text="Twenty different Grand Slam champions since 2015. More players winning than any era before. Fewer players you remember the following year."
           />
-
           <div className="fl-reveal-card">
             <h3 className="fl-reveal-h">You voted before seeing any data. Did the evidence change your mind?</h3>
             {!vote && <div className="fl-reveal-sub">Cast your vote at the top to see what others thought.</div>}
