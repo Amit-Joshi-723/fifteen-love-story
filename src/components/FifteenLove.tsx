@@ -1042,7 +1042,7 @@ export default function FifteenLove() {
             <p className="fl-bridge-p">
               Fan attachment is built through protagonists you follow across years. Today's best
               players are also surface specialists in a way the dominant-era players were not.
-              <strong>Sabalenka</strong> has not won Roland Garros or Wimbledon. <strong>Rybakina</strong> has not won Roland
+              {" "}<strong>Sabalenka</strong> has not won Roland Garros or Wimbledon. <strong>Rybakina</strong> has not won Roland
               Garros or the US Open. Even <strong>Swiatek</strong> only won Wimbledon once, in 2025. When the
               best players have a surface you can beat them on, they feel beatable rather than
               transcendent — and transcendence is what casual fans come back to watch.
