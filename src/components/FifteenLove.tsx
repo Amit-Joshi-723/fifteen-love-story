@@ -913,12 +913,21 @@ export default function FifteenLove() {
         <Section id="ch2">
           <ChapterLabel>Chapter 2 · The paradox</ChapterLabel>
           <h2 className="fl-h2">Better tennis. Stranger winners.</h2>
-          <p className="fl-p">
-            By every standard measure the sport got more competitive — more 3-set finals, higher
-            upset rates, longer rallies. But the rankings of Grand Slam winners since 2015 have
-            reached levels that simply didn't exist before.
-          </p>
-          <div className="fl-table-wrap">
+          <div className="fl-split">
+            <div className="fl-split-left">
+              <p className="fl-p">
+                By every standard measure the sport got more competitive — more 3-set finals, higher
+                upset rates, longer rallies. But the rankings of Grand Slam winners since 2015 have
+                reached levels that simply didn't exist before.
+              </p>
+              <DarkCallout
+                number="4"
+                text="Since 2015, four Grand Slams went to players ranked outside the top 40 — including one ranked #150. Before 2015, the lowest-ranked winner in 15 years was around #30. The top 10 used to mean something different."
+                label="Verified · WTA Grand Slam Honor Roll official source"
+              />
+            </div>
+            <div className="fl-split-right">
+              <div className="fl-table-wrap">
             <table className="fl-table">
               <thead>
                 <tr>
@@ -941,12 +950,9 @@ export default function FifteenLove() {
                 ))}
               </tbody>
             </table>
+              </div>
+            </div>
           </div>
-          <DarkCallout
-            number="4"
-            text="Since 2015, four Grand Slams went to players ranked outside the top 40 — including one ranked #150. Before 2015, the lowest-ranked winner in 15 years was around #30. The top 10 used to mean something different."
-            label="Verified · WTA Grand Slam Honor Roll official source"
-          />
           <p className="fl-p">
             The rallies got longer too. Wimbledon grass used to produce points in three or four
             shots. Now it's closer to seven. The game is more physical than it was in 2006 —
