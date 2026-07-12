@@ -315,9 +315,9 @@ html { scroll-behavior: smooth; }
 .fl-results { margin-top: 10px; }
 .fl-results-row { display: grid; grid-template-columns: 90px 1fr; gap: 10px; align-items: center; margin-bottom: 8px; }
 .fl-results-label { font-size: 12px; color: #1a1a18; font-weight: 600; }
-.fl-results-bar-wrap { position: relative; background: #f0f0ec; height: 22px; border-radius: 4px; overflow: hidden; display: flex; align-items: center; }
-.fl-results-bar { height: 100%; transition: width .5s ease; min-width: 2px; }
-.fl-results-pct { position: absolute; right: 8px; font-size: 11px; color: #1a1a18; font-weight: 600; }
+.fl-results-bar-wrap { position: relative; background: #f0f0ec; height: 8px; border-radius: 4px; overflow: hidden; display: flex; align-items: center; }
+.fl-results-bar { height: 8px; border-radius: 4px; transition: width .5s ease; min-width: 0; }
+.fl-results-pct { position: absolute; right: 8px; top: -16px; font-size: 11px; color: #1a1a18; font-weight: 600; }
 .fl-results-total { font-size: 11px; color: #888; margin-top: 8px; font-style: italic; }
 
 .fl-note { font-size: 11px; color: #999; font-style: italic; margin-top: 10px; }
