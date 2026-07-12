@@ -645,4 +645,132 @@ export default function FifteenLove() {
         <Section id="ch3">
           <ChapterLabel>Chapter 3 · The Surface Story</ChapterLabel>
           <h2 className="fl-h2">The surface changes everything. Here is the proof.</h2>
-          <p className="fl-p">The overall trends hide dramatic variation. Green = most
+          <p className="fl-p">The overall trends hide dramatic variation. Green = most competitive or improved. Red = least. Roland Garros is the honest exception — clay you build over years, and the data shows exactly why it resists the broader trend.</p>
+          <Matrix />
+          <PullQuote>Three majors more competitive than ever. One holding firm. But the most important number isn't in this matrix.</PullQuote>
+        </Section>
+
+        <ChapterDivider />
+
+        <Section id="ch4">
+          <ChapterLabel>Chapter 4 · The Missing Piece</ChapterLabel>
+          <h2 className="fl-h2">The rivalries are gone. This is what replaced them.</h2>
+          <div className="fl-split">
+            <div className="fl-split-left">
+              <p className="fl-p-serif">The best rivalries were never just about tennis. Two sisters competing for the same trophy had a story underneath the match that anyone could feel without knowing the score. American players against Russian players carried a weight beyond the ranking. Those stories emerged from real characters competing across years. You knew the history before the match started.</p>
+              <DarkCallout
+                insight="03"
+                number="18→2"
+                text="18 recurring rivalry finals before 2015. 2 brief clusters since — neither lasted more than 3 years. The sport got more competitive and less narrative-driven at exactly the same time."
+                label="All rivalry data verified from Wikipedia"
+              />
+            </div>
+            <div className="fl-split-right">
+              <div className="fl-rival-label">Before 2015 — Sustained Rivalries · Verified</div>
+              <div className="fl-rival-list">
+                {RIVALS_BEFORE.map((r) => (
+                  <div key={r.pair} className="fl-rival-row">
+                    <div><div className="fl-rival-pair">{r.pair}</div><div className="fl-rival-years">{r.years} · {r.finals}</div></div>
+                    <div className="fl-rival-bar-wrap"><div className="fl-rival-bar" style={{ width: `${r.pct}%`, background: "#0D9488" }} /></div>
+                  </div>
+                ))}
+              </div>
+              <div className="fl-divider"><span>2015 — The rivalry era shifts</span></div>
+              <div className="fl-rival-label">2015–2026 — Recurring Pairs · Verified</div>
+              <div className="fl-rival-list">
+                {RIVALS_AFTER.map((r) => (
+                  <div key={r.pair} className="fl-rival-row">
+                    <div><div className="fl-rival-pair">{r.pair}</div><div className="fl-rival-years">{r.years} · {r.finals}</div></div>
+                    <div className="fl-rival-bar-wrap"><div className="fl-rival-bar" style={{ width: `${r.pct}%`, background: "#4A7070" }} /></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="fl-bridge">
+            <div className="fl-bridge-label">Insight 04 · The Insight That Connects Everything</div>
+            <h3 className="fl-bridge-h">More competitive. Harder to follow. Here's why both are true.</h3>
+            <div className="fl-bridge-takeaway">
+              <div className="fl-bridge-takeaway-label">Takeaway 1 · The surface specialist problem</div>
+              <div className="fl-bridge-takeaway-text">Today's best players are surface specialists in a way the dominant-era players were not. Sabalenka has not won Roland Garros or Wimbledon. Rybakina has not won Roland Garros or the US Open. When the best players have a surface you can beat them on, they feel beatable rather than transcendent — and transcendence is what casual fans come back to watch.</div>
+            </div>
+            <div className="fl-bridge-takeaway">
+              <div className="fl-bridge-takeaway-label">Takeaway 2 · The viewership collapse</div>
+              <div className="fl-bridge-takeaway-text">The 2019 US Open final drew 4 million viewers. The 2020 final without a recognisable name drew 2.15 million — a 46% drop in one year. Sport runs on stories, and a story needs the same characters to return. More players can win. Fewer can carry a casual fan across a full season.</div>
+            </div>
+          </div>
+
+          <PullQuote>Titles spread to players from 20 nations. Who are those nations — and what happened to the old powers?</PullQuote>
+        </Section>
+
+        <ChapterDivider />
+
+        <Section id="ch5">
+          <ChapterLabel>Chapter 5 · The World Changed</ChapterLabel>
+          <h2 className="fl-h2">Three countries used to own this sport. Now nobody does.</h2>
+          <div className="fl-split">
+            <div className="fl-split-left">
+              <p className="fl-p">USA, Belgium, and Russia held 8 of the top 10 WTA rankings in 2003. Today no single country holds more than 2. The most geographically diverse field in the sport's history — genuinely good for tennis globally, even if it made the narrative harder to follow from any single country.</p>
+              <AmberCallout>Czech Republic at Wimbledon: Vondroušová, Krejčíková, Nosková — 3 of the last 4 Wimbledons, all ranked outside the top 30. Not a dynasty — a system that keeps producing grass court specialists on the most unpredictable major surface.</AmberCallout>
+            </div>
+            <div className="fl-split-right">
+              <div className="fl-geo-grid">
+                <GeoList title="2000–2009 · Grand Slam Titles" rows={GEO_OLD} />
+                <GeoList title="2015–2026 · Grand Slam Titles" rows={GEO_NEW} />
+              </div>
+            </div>
+          </div>
+          <PullQuote>Five chapters of evidence. Did it shift the view you held when you first voted?</PullQuote>
+          <div className="fl-note">Geographic data partially estimated · Sabalenka competed as neutral from 2022 · Japan = Osaka (4 titles)</div>
+        </Section>
+
+        <ChapterDivider />
+
+        <Section id="ch6">
+          <ChapterLabel>Chapter 6 · The Verdict</ChapterLabel>
+          <h2 className="fl-h2">Two honest cases — one question — you decide.</h2>
+          <div className="fl-debate">
+            <div className="fl-debate-card">
+              <h3 className="fl-debate-h fl-green-text">The Case For Better</h3>
+              <ul>
+                <li>20 different players won Grand Slams 2015–26 vs top 3 taking 62% in 2000–09</li>
+                <li>30% of titles went outside the top 10 — the field is genuinely deeper than ever</li>
+                <li>Finals are closer — 71% at Wimbledon go to 3 sets, upset rate doubled</li>
+                <li>More global — 17 nationalities in the top 10 vs 8 in 2003</li>
+              </ul>
+            </div>
+            <div className="fl-debate-card">
+              <h3 className="fl-debate-h fl-red-text">The Case For Worse</h3>
+              <ul>
+                <li>18 recurring rivalry finals before 2015. 2 brief clusters since. No match that arrives with a decade of shared history.</li>
+                <li>The 2019 US Open final drew 4 million viewers. The 2020 final drew 2.15 million — a 46% drop when the names weren't recognisable.</li>
+                <li>Today's best players each have a surface you can beat them on. Beatable is not transcendent.</li>
+                <li>Winners ranked #47, #83, #150 — extraordinary moments, but no story to follow next week.</li>
+              </ul>
+            </div>
+          </div>
+
+          <DarkCallout
+            insight="05"
+            number="The verdict"
+            text="The sport got harder to predict and easier to ignore at the same time. More players can win. Fewer build the sustained, cross-surface, multi-year presence that makes a casual fan come back next season. That is not a failure of women's tennis — it is just what happens when depth wins and stars become rare."
+            label="Fifteen Love · A data study of women's Grand Slam tennis · 2000–2026"
+          />
+
+          <div className="fl-reveal-card">
+            <h3 className="fl-reveal-h">You voted before seeing any data. Did the evidence change your mind?</h3>
+            {!vote && <div className="fl-reveal-sub">Cast your vote at the top to see what others thought.</div>}
+            {vote && <ResultsCard results={results} onChangeVote={onChangeVote} />}
+          </div>
+        </Section>
+
+        <footer className="fl-footer">
+          <div>Data: Jeff Sackmann Match Charting Project · CC Attribution-NonCommercial-ShareAlike 4.0</div>
+          <div>Rankings: WTA Grand Slam Honor Roll (official) · Results: Wikipedia & landoftennis.com · Viewership: Sports Media Watch</div>
+          <div>Analysis: Amit Joshi · <a href="https://github.com/Amit-Joshi-723" target="_blank" rel="noreferrer">github.com/Amit-Joshi-723</a> · Wimbledon 2026: Nosková def. Muchová 6-2, 5-7, 6-3</div>
+        </footer>
+      </main>
+    </div>
+  );
+}
