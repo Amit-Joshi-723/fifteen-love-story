@@ -9,7 +9,6 @@ import {
   ResponsiveContainer,
   ReferenceLine,
   CartesianGrid,
-  Legend,
 } from "recharts";
 import { flSupabase } from "@/lib/supabase-fl";
 
@@ -110,13 +109,21 @@ function useDerived(rows: Row[] | null) {
       m.set(w, (m.get(w) || 0) + 1);
     }
 
-    // Annual top-1/3/5 share
+    // 4-year rolling window top-1/3/5 share (year Y uses finals from Y-3..Y)
     const yearRange: number[] = [];
-    for (let y = 2000; y <= 2024; y++) yearRange.push(y);
+    for (let y = 2003; y <= 2024; y++) yearRange.push(y);
     const concentration = yearRange.map((y) => {
-      const m = titlesByYear.get(y);
-      const total = m ? Array.from(m.values()).reduce((a, b) => a + b, 0) : 0;
-      const sorted = m ? Array.from(m.values()).sort((a, b) => b - a) : [];
+      const counts = new Map<string, number>();
+      let total = 0;
+      for (let yy = y - 3; yy <= y; yy++) {
+        const m = titlesByYear.get(yy);
+        if (!m) continue;
+        for (const [p, c] of m) {
+          counts.set(p, (counts.get(p) || 0) + c);
+          total += c;
+        }
+      }
+      const sorted = Array.from(counts.values()).sort((a, b) => b - a);
       const share = (n: number) =>
         total > 0
           ? Math.round((sorted.slice(0, n).reduce((a, b) => a + b, 0) / total) * 100)
@@ -336,16 +343,16 @@ function ConcentrationChart({
         className="fl-chart-wrap"
         aria-label="Line chart of Grand Slam title concentration by top players from 2000 to 2024"
       >
-        <ResponsiveContainer width="100%" height={280}>
+        <ResponsiveContainer width="100%" height={220}>
           <LineChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
             <CartesianGrid stroke="#eee" vertical={false} />
             <XAxis
               dataKey="year"
-              ticks={[2000, 2002, 2004, 2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024]}
+              ticks={[2004, 2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024]}
               tick={{ fontSize: 11, fill: "#888" }}
             />
             <YAxis
-              domain={[0, 100]}
+              domain={[20, 90]}
               tickFormatter={(v) => `${v}%`}
               tick={{ fontSize: 11, fill: "#888" }}
             />
@@ -354,26 +361,26 @@ function ConcentrationChart({
               x={2016}
               stroke="#F59E0B"
               strokeDasharray="4 4"
-              label={{ value: "← 2016", position: "top", fontSize: 11, fill: "#F59E0B" }}
+              strokeWidth={1}
             />
             {show.top1 && (
-              <Line type="monotone" dataKey="top1" stroke="#1D9E75" strokeWidth={2} dot={false} name="Top 1" />
+              <Line type="monotone" dataKey="top1" stroke="#1D9E75" strokeWidth={2.5} dot={false} activeDot={false} name="Top 1" />
             )}
             {show.top3 && (
-              <Line type="monotone" dataKey="top3" stroke="#2563EB" strokeWidth={2} dot={false} name="Top 3" />
+              <Line type="monotone" dataKey="top3" stroke="#2563EB" strokeWidth={2.5} dot={false} activeDot={false} name="Top 3" />
             )}
             {show.top5 && (
               <Line
                 type="monotone"
                 dataKey="top5"
                 stroke="#F59E0B"
-                strokeDasharray="5 5"
+                strokeDasharray="5 3"
                 strokeWidth={2}
                 dot={false}
+                activeDot={false}
                 name="Top 5"
               />
             )}
-            <Legend wrapperStyle={{ fontSize: 11 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -632,32 +639,42 @@ function GeoList({
 type Results = { better: number; worse: number; different: number; total: number };
 
 function ResultsCard({ results }: { results: Results | null }) {
-  const r = results ?? { better: 39, worse: 34, different: 27, total: 0 };
-  const total = r.total || r.better + r.worse + r.different;
-  const pct = (n: number) => (total > 0 ? Math.round((n / total) * 100) : 0);
-  const bars = [
-    { key: "better", label: "Better", val: r.better, color: "#1D9E75" },
-    { key: "worse", label: "Worse", val: r.worse, color: "#DC2626" },
-    { key: "different", label: "Different", val: r.different, color: "#6B7280" },
-  ];
+  const hasReal = !!results && results.total > 0;
+  const bars = hasReal
+    ? [
+        { key: "better", label: "Better", pct: Math.round((results!.better / results!.total) * 100), color: "#1D9E75" },
+        { key: "worse", label: "Worse", pct: Math.round((results!.worse / results!.total) * 100), color: "#DC2626" },
+        { key: "different", label: "Different", pct: Math.round((results!.different / results!.total) * 100), color: "#6B7280" },
+      ]
+    : [
+        { key: "better", label: "Better", pct: 39, color: "#1D9E75" },
+        { key: "worse", label: "Worse", pct: 34, color: "#DC2626" },
+        { key: "different", label: "Different", pct: 27, color: "#6B7280" },
+      ];
+  const [animPct, setAnimPct] = useState<number[]>([0, 0, 0]);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setAnimPct(bars.map((b) => b.pct)));
+    return () => cancelAnimationFrame(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasReal, bars[0].pct, bars[1].pct, bars[2].pct]);
   return (
     <div className="fl-results">
-      {bars.map((b) => (
+      {bars.map((b, i) => (
         <div key={b.key} className="fl-results-row">
           <div className="fl-results-label">{b.label}</div>
           <div className="fl-results-bar-wrap">
             <div
               className="fl-results-bar"
-              style={{ width: `${pct(b.val)}%`, background: b.color }}
+              style={{ width: `${animPct[i]}%`, background: b.color }}
             />
-            <span className="fl-results-pct">{pct(b.val)}%</span>
+            <span className="fl-results-pct">{b.pct}%</span>
           </div>
         </div>
       ))}
       <div className="fl-results-total">
-        {total > 0
-          ? `${total.toLocaleString()} people have voted since Wimbledon 2026`
-          : "Loading live results…"}
+        {hasReal
+          ? `${results!.total.toLocaleString()} people have voted since Wimbledon 2026`
+          : "Be the first to vote — results update in real time"}
       </div>
       <div className="fl-note">Live results via Supabase · Updated in real time</div>
     </div>
@@ -896,12 +913,21 @@ export default function FifteenLove() {
         <Section id="ch2">
           <ChapterLabel>Chapter 2 · The paradox</ChapterLabel>
           <h2 className="fl-h2">Better tennis. Stranger winners.</h2>
-          <p className="fl-p">
-            By every standard measure the sport got more competitive — more 3-set finals, higher
-            upset rates, longer rallies. But the rankings of Grand Slam winners since 2015 have
-            reached levels that simply didn't exist before.
-          </p>
-          <div className="fl-table-wrap">
+          <div className="fl-split">
+            <div className="fl-split-left">
+              <p className="fl-p">
+                By every standard measure the sport got more competitive — more 3-set finals, higher
+                upset rates, longer rallies. But the rankings of Grand Slam winners since 2015 have
+                reached levels that simply didn't exist before.
+              </p>
+              <DarkCallout
+                number="4"
+                text="Since 2015, four Grand Slams went to players ranked outside the top 40 — including one ranked #150. Before 2015, the lowest-ranked winner in 15 years was around #30. The top 10 used to mean something different."
+                label="Verified · WTA Grand Slam Honor Roll official source"
+              />
+            </div>
+            <div className="fl-split-right">
+              <div className="fl-table-wrap">
             <table className="fl-table">
               <thead>
                 <tr>
@@ -924,12 +950,9 @@ export default function FifteenLove() {
                 ))}
               </tbody>
             </table>
+              </div>
+            </div>
           </div>
-          <DarkCallout
-            number="4"
-            text="Since 2015, four Grand Slams went to players ranked outside the top 40 — including one ranked #150. Before 2015, the lowest-ranked winner in 15 years was around #30. The top 10 used to mean something different."
-            label="Verified · WTA Grand Slam Honor Roll official source"
-          />
           <p className="fl-p">
             The rallies got longer too. Wimbledon grass used to produce points in three or four
             shots. Now it's closer to seven. The game is more physical than it was in 2006 —
@@ -964,15 +987,41 @@ export default function FifteenLove() {
         <Section id="ch4">
           <ChapterLabel>Chapter 4 · The missing piece</ChapterLabel>
           <h2 className="fl-h2">The rivalries are gone. This is what replaced them.</h2>
-          <p className="fl-p">
+          <div className="fl-split">
+            <div className="fl-split-left">
+              <p className="fl-p">
             The best rivalries were never just about tennis. Two sisters competing for the same
             trophy had a story underneath the match that anyone could feel without knowing the
             score. American players against Russian players carried a weight beyond the ranking.
             Those stories were not manufactured — they emerged from real characters competing
             across years. You knew the history before the match started.
-          </p>
-
-          <div className="fl-rival-label">Before 2015 — sustained recurring rivalries · verified</div>
+              </p>
+              <DarkCallout
+                number="18→2"
+                text="18 recurring rivalry finals before 2015. 2 brief clusters since — neither lasted more than 3 years. The sport got more competitive and less narrative-driven at exactly the same time."
+                label="All rivalry data verified from Wikipedia · Flag corrections at github.com/Amit-Joshi-723"
+              />
+              <div className="fl-bridge">
+                <div className="fl-bridge-label">THE INSIGHT THAT CONNECTS EVERYTHING</div>
+                <h3 className="fl-bridge-h">More competitive. Harder to follow. Here's why both are true.</h3>
+                <p className="fl-bridge-p">
+                  Fan attachment is built through protagonists you follow across years. Today's best
+                  players are also surface specialists in a way the dominant-era players were not.
+                  Sabalenka has not won Roland Garros or Wimbledon. Rybakina has not won Roland
+                  Garros or the US Open. Even Swiatek only won Wimbledon once, in 2025. When the
+                  best players have a surface you can beat them on, they feel beatable rather than
+                  transcendent — and transcendence is what casual fans come back to watch.
+                </p>
+                <p className="fl-bridge-p">
+                  The 2019 US Open final drew 4 million viewers. The 2020 final without a
+                  recognisable name drew 2.15 million — a 46% drop in one year. When Raducanu won
+                  ranked #150, it was extraordinary. She went back to rank 75 the following year.
+                  Sport runs on stories, and a story needs the same characters to return.
+                </p>
+              </div>
+            </div>
+            <div className="fl-split-right">
+              <div className="fl-rival-label">Before 2015 — sustained recurring rivalries · verified</div>
           <div className="fl-rival-list">
             {RIVALS_BEFORE.map((r) => (
               <div key={r.pair} className="fl-rival-row">
@@ -986,12 +1035,10 @@ export default function FifteenLove() {
               </div>
             ))}
           </div>
-
-          <div className="fl-divider">
+              <div className="fl-divider">
             <span>2015 — the rivalry era shifts</span>
           </div>
-
-          <div className="fl-rival-label">2015–2026 — recurring pairs · verified</div>
+              <div className="fl-rival-label">2015–2026 — recurring pairs · verified</div>
           <div className="fl-rival-list">
             {RIVALS_AFTER.map((r) => (
               <div key={r.pair} className="fl-rival-row">
@@ -1005,32 +1052,8 @@ export default function FifteenLove() {
               </div>
             ))}
           </div>
-
-          <DarkCallout
-            number="18→2"
-            text="18 recurring rivalry finals before 2015. 2 brief clusters since — neither lasted more than 3 years. The sport got more competitive and less narrative-driven at exactly the same time."
-            label="All rivalry data verified from Wikipedia · Flag corrections at github.com/Amit-Joshi-723"
-          />
-
-          <div className="fl-bridge">
-            <div className="fl-bridge-label">THE INSIGHT THAT CONNECTS EVERYTHING</div>
-            <h3 className="fl-bridge-h">More competitive. Harder to follow. Here's why both are true.</h3>
-            <p className="fl-bridge-p">
-              Fan attachment is built through protagonists you follow across years. Today's best
-              players are also surface specialists in a way the dominant-era players were not.
-              Sabalenka has not won Roland Garros or Wimbledon. Rybakina has not won Roland
-              Garros or the US Open. Even Swiatek only won Wimbledon once, in 2025. When the
-              best players have a surface you can beat them on, they feel beatable rather than
-              transcendent — and transcendence is what casual fans come back to watch.
-            </p>
-            <p className="fl-bridge-p">
-              The 2019 US Open final drew 4 million viewers. The 2020 final without a
-              recognisable name drew 2.15 million — a 46% drop in one year. When Raducanu won
-              ranked #150, it was extraordinary. She went back to rank 75 the following year.
-              Sport runs on stories, and a story needs the same characters to return.
-            </p>
+            </div>
           </div>
-
           <PullQuote>
             Titles spread to players from 20 nations. Who are those nations — and what happened
             to the old powers?
@@ -1041,21 +1064,27 @@ export default function FifteenLove() {
         <Section id="ch5">
           <ChapterLabel>Chapter 5 · The world changed</ChapterLabel>
           <h2 className="fl-h2">Three countries used to own this sport. Now nobody does.</h2>
-          <p className="fl-p">
+          <div className="fl-split">
+            <div className="fl-split-left">
+              <p className="fl-p">
             USA, Belgium, and Russia held 8 of the top 10 WTA rankings in 2003. Today no single
             country holds more than 2. The most geographically diverse field in the sport's
             history — genuinely good for tennis globally, even if it made the narrative harder
             to follow from any single country.
-          </p>
-          <div className="fl-geo-grid">
+              </p>
+              <AmberCallout>
+                Czech Republic at Wimbledon: Vondroušová, Krejčíková, Nosková — 3 of the last 4
+                Wimbledons, all ranked outside the top 30. Not a dynasty — a system that keeps
+                producing grass court specialists on the most unpredictable major surface.
+              </AmberCallout>
+            </div>
+            <div className="fl-split-right">
+              <div className="fl-geo-grid">
             <GeoList title="2000–2009 · Grand Slam titles" rows={GEO_OLD} />
             <GeoList title="2015–2026 · Grand Slam titles" rows={GEO_NEW} />
+              </div>
+            </div>
           </div>
-          <AmberCallout>
-            Czech Republic at Wimbledon: Vondroušová, Krejčíková, Nosková — 3 of the last 4
-            Wimbledons, all ranked outside the top 30. Not a dynasty — a system that keeps
-            producing grass court specialists on the most unpredictable major surface.
-          </AmberCallout>
           <PullQuote>
             Five chapters of evidence. Did it shift the view you held when you first voted?
           </PullQuote>
