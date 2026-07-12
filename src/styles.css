@@ -4,20 +4,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
- */
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -127,20 +113,14 @@
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
   --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
 @layer base {
-  * {
-    border-color: var(--color-border);
-  }
-
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-  }
+  * { border-color: var(--color-border); }
+  body { background-color: var(--color-background); color: var(--color-foreground); }
 }
 
 /* ---------------- Fifteen Love ---------------- */
@@ -195,6 +175,7 @@ html { scroll-behavior: smooth; }
 .fl-vote-btn-label { font-size: 13px; font-weight: 700; color: #1a1a18; }
 .fl-vote-btn-sub { font-size: 11px; color: #888; margin-top: 3px; }
 .fl-vote-note { font-size: 11px; color: #1D9E75; margin-top: 10px; font-style: italic; }
+.fl-change-vote { font-size: 11px; color: #1D9E75; background: none; border: none; cursor: pointer; text-decoration: underline; margin-top: 8px; padding: 0; font-family: inherit; display: inline-block; }
 
 /* Reveal after vote */
 .fl-reveal { margin-top: 1.5rem; scroll-margin-top: 60px; }
@@ -206,9 +187,19 @@ html { scroll-behavior: smooth; }
 .fl-era-arrow { font-size: 26px; color: #9FE1CB; }
 @media (max-width: 640px) { .fl-era-card { grid-template-columns: 1fr; text-align: left; } .fl-era-arrow { display: none; } }
 
-/* Metric grid */
+/* Metric grid — flip cards */
 .fl-metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
 @media (max-width: 640px) { .fl-metric-grid { grid-template-columns: 1fr; } }
+
+.fl-flip-card { perspective: 1000px; cursor: pointer; min-height: 130px; }
+.fl-flip-inner { position: relative; width: 100%; height: 100%; min-height: 130px; transition: transform 0.4s; transform-style: preserve-3d; }
+.fl-flip-card.flipped .fl-flip-inner { transform: rotateY(180deg); }
+.fl-flip-front, .fl-flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 10px; padding: 14px; box-sizing: border-box; }
+.fl-flip-front { background: #f7f6f2; }
+.fl-flip-back { background: #0F6E56; transform: rotateY(180deg); display: flex; flex-direction: column; justify-content: center; }
+.fl-flip-back-text { font-size: 11px; color: #E1F5EE; line-height: 1.7; }
+.fl-flip-hint { font-size: 10px; color: #aaa; margin-top: 6px; text-align: right; }
+
 .fl-metric-card { background: #f7f6f2; border-radius: 10px; padding: 14px; }
 .fl-metric-v { font-family: Georgia, serif; font-size: 26px; color: #0F6E56; line-height: 1; }
 .fl-metric-label { font-size: 12px; color: #555; margin-top: 6px; line-height: 1.4; }
@@ -219,9 +210,9 @@ html { scroll-behavior: smooth; }
 
 /* Section */
 .fl-section { margin-top: 3rem; scroll-margin-top: 60px; }
-.fl-chapter-label { font-size: 10px; text-transform: uppercase; color: #888; letter-spacing: 1px; }
-.fl-h2 { font-family: Georgia, serif; font-size: 28px; color: #1a1a18; margin: 6px 0 12px; line-height: 1.35; }
-@media (max-width: 640px) { .fl-h2 { font-size: 22px; } }
+.fl-chapter-label { font-size: 13px; text-transform: uppercase; color: #1D9E75; letter-spacing: 1px; font-weight: 600; margin-bottom: 6px; }
+.fl-h2 { font-family: Georgia, serif; font-size: 32px; font-weight: 700; color: #1a1a18; margin: 6px 0 12px; line-height: 1.2; }
+@media (max-width: 640px) { .fl-h2 { font-size: 24px; } }
 .fl-p { font-size: 14px; color: #555; line-height: 1.65; margin: 0 0 14px; }
 
 /* Dark callout */
@@ -286,7 +277,7 @@ html { scroll-behavior: smooth; }
 /* Bridge */
 .fl-bridge { background: #0F6E56; border-radius: 14px; padding: 1.5rem; margin: 18px 0; }
 .fl-bridge-label { font-size: 10px; text-transform: uppercase; color: #9FE1CB; letter-spacing: 1px; }
-.fl-bridge-h { font-family: Georgia, serif; font-size: 20px; color: #ffffff; margin: 6px 0 12px; line-height: 1.35; }
+.fl-bridge-h { font-family: Georgia, serif; font-size: 20px; color: #ffffff; margin: 6px 0 12px; line-height: 1.35; font-weight: 600; }
 .fl-bridge-p { font-size: 14px; color: #ffffff; line-height: 1.6; margin: 0 0 12px; }
 .fl-bridge-p:last-child { margin-bottom: 0; }
 .fl-bridge strong { color: #9FE1CB; }
@@ -324,14 +315,13 @@ html { scroll-behavior: smooth; }
 .fl-results-total { font-size: 11px; color: #888; margin-top: 8px; font-style: italic; }
 
 .fl-note { font-size: 11px; color: #999; font-style: italic; margin-top: 10px; }
-
 .fl-footer { margin-top: 3rem; padding: 1.5rem 0; border-top: .5px solid #e5e5e0; font-size: 11px; color: #888; line-height: 1.6; }
 .fl-footer a { color: #1D9E75; text-decoration: none; }
+.fl-footer a:hover { text-decoration: underline; }
 
-/* Split layout for chapters 2, 4, 5 */
+/* Split layout */
 .fl-split { display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; align-items: start; margin: 8px 0 14px; }
 .fl-split-left, .fl-split-right { min-width: 0; }
 @media (max-width: 640px) { .fl-split { grid-template-columns: 1fr; } }
-.fl-footer a:hover { text-decoration: underline; }
 
 strong { color: #1a1a18; }
