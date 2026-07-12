@@ -77,14 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Fifteen Love — 25 Years Served" },
+      { name: "description", content: "A data study of women's Grand Slam tennis across 25 years." },
+      { name: "author", content: "Amit Joshi" },
+      { property: "og:title", content: "Fifteen Love — 25 Years Served" },
+      { property: "og:description", content: "A data study of women's Grand Slam tennis across 25 years." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
