@@ -349,7 +349,7 @@ function ConcentrationChart({
               tickFormatter={(v) => `${v}%`}
               tick={{ fontSize: 11, fill: "#888" }}
             />
-            <Tooltip formatter={(v: number) => `${v}%`} />
+            <Tooltip formatter={(v) => `${v}%`} />
             <ReferenceLine
               x={2016}
               stroke="#F59E0B"
