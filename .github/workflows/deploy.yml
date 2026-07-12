@@ -27,11 +27,22 @@ jobs:
 
       - name: Build
         run: bun run build
+        env:
+          NODE_ENV: production
+
+      - name: List output directory
+        run: |
+          echo "--- root ---"
+          ls -la
+          echo "--- .output (if exists) ---"
+          ls -la .output 2>/dev/null || echo "no .output folder"
+          echo "--- dist (if exists) ---"
+          ls -la dist 2>/dev/null || echo "no dist folder"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./.output/public
 
   deploy:
     needs: build
